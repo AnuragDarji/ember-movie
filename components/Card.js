@@ -24,6 +24,7 @@ export default function Card({ item, progress }) {
           </div>
         </div>
         <p className="card__title">{item.title}</p>
+        <p className="card__meta">{[item.year, TYPE[item.type]].filter(Boolean).join(' • ')}</p>
         {progress && <p className="card__progress">{progress}</p>}
       </Link>
       <WatchlistButton item={item} compact />

@@ -38,6 +38,10 @@ export default async function TmdbBrowse({ type, title, intro, featured, searchP
         <Suspense><FilterBar fields={fields} /></Suspense>
         {result.items.length ? (
           <>
+            <div className="row__head row__head--flush">
+              <h2 className="row__title">{filtered ? 'Results' : `All ${title}`}</h2>
+              {filtered && <span className="row__count">{result.items.length}+ titles</span>}
+            </div>
             <Grid items={result.items} />
             <LoadMore
               key={JSON.stringify(f)}
@@ -51,6 +55,7 @@ export default async function TmdbBrowse({ type, title, intro, featured, searchP
           hasTmdbKey() && <p className="empty empty--flush">Nothing matches these filters. Widen the year or rating, or clear the filters.</p>
         )}
       </section>
+      {filtered && <Suspense fallback={null}>{featured}</Suspense>}
     </div>
   );
 }
