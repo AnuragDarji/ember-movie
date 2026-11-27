@@ -5,7 +5,8 @@ import PageHeader from '@/components/PageHeader';
 import LoadMore from '@/components/LoadMore';
 import Row from '@/components/Row';
 import SetupNotice from '@/components/SetupNotice';
-import { discover, getGenreList, hasTmdbKey, LANGUAGES, SORTS } from '@/lib/tmdb';
+import OttBar from '@/components/OttBar';
+import { DEFAULT_REGION, discover, getGenreList, getProviders, hasTmdbKey, LANGUAGES, REGIONS, SORTS } from '@/lib/tmdb';
 
 // Shared by /movies and /tv: a featured row, then a filterable, paginated grid.
 export default async function TmdbBrowse({ type, title, intro, featured, searchParams }) {
@@ -16,10 +17,12 @@ export default async function TmdbBrowse({ type, title, intro, featured, searchP
     rating: searchParams.rating || '',
     sort: searchParams.sort || 'trending',
     page: searchParams.page || '1',
+    ott: searchParams.ott || '',
+    region: REGIONS.some(([c]) => c === searchParams.region) ? searchParams.region : DEFAULT_REGION,
   };
-  const [genres, result] = await Promise.all([getGenreList(type), discover(type, f)]);
+  const [genres, result, providers] = await Promise.all([getGenreList(type), discover(type, f), getProviders(type, f.region)]);
   const thisYear = new Date().getFullYear();
-  const filtered = f.genre || f.year || f.lang || f.rating || f.sort !== 'trending' || f.page !== '1';
+  const filtered = f.genre || f.year || f.lang || f.rating || f.ott || f.sort !== 'trending' || f.page !== '1';
 
   const fields = [
     { name: 'sort', label: 'Sort', options: Object.entries(SORTS).map(([k, v]) => [k === 'trending' ? '' : k, v.label]) },
@@ -35,6 +38,7 @@ export default async function TmdbBrowse({ type, title, intro, featured, searchP
       {!hasTmdbKey() && <SetupNotice />}
       {!filtered && <Suspense fallback={null}>{featured}</Suspense>}
       <section className="pad browse" aria-label={`Browse ${title}`}>
+        <Suspense><OttBar providers={providers} regions={REGIONS} region={f.region} /></Suspense>
         <Suspense><FilterBar fields={fields} /></Suspense>
         {result.items.length ? (
           <>
@@ -46,7 +50,7 @@ export default async function TmdbBrowse({ type, title, intro, featured, searchP
             <LoadMore
               key={JSON.stringify(f)}
               type={type}
-              filters={{ genre: f.genre, year: f.year, lang: f.lang, rating: f.rating, sort: f.sort }}
+              filters={{ genre: f.genre, year: f.year, lang: f.lang, rating: f.rating, sort: f.sort, ott: f.ott, region: f.region }}
               startPage={result.page + 1}
               totalPages={result.totalPages}
             />

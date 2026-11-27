@@ -4,6 +4,8 @@ import TitleActions from './TitleActions';
 import SeasonPicker from './SeasonPicker';
 import AnimeEpisodes from './AnimeEpisodes';
 import TrackView from './TrackView';
+import BackButton from './BackButton';
+import TrailerPlayer from './TrailerPlayer';
 
 export default function DetailView({ d }) {
   const isAnime = d.type === 'anime';
@@ -11,6 +13,7 @@ export default function DetailView({ d }) {
   return (
     <article className="detail">
       <TrackView item={d} />
+      <BackButton fallback={isAnime ? '/anime' : d.type === 'tv' ? '/tv' : '/movies'} />
       <div className="detail__backdrop">
         {(d.backdrop || d.poster) && <img src={d.backdrop || d.poster} alt="" />}
         <div className="detail__shade" />
@@ -33,6 +36,8 @@ export default function DetailView({ d }) {
           <TitleActions item={d} trailerUrl={d.trailerUrl} />
         </div>
       </div>
+
+      <TrailerPlayer url={d.trailerUrl} title={d.title} poster={d.backdrop || d.poster} />
 
       <div className="facts pad">
         {d.facts?.length > 0 && (

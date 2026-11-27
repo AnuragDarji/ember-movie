@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useCollection } from '@/lib/library';
+import { watchHref } from '@/lib/watchHref';
 import { CheckIcon, StarIcon } from './Icons';
 
 export default function SeasonPicker({ item, seasons }) {
@@ -67,6 +68,9 @@ export default function SeasonPicker({ item, seasons }) {
                   </p>
                   {ep.overview && <p className="ep__overview">{ep.overview}</p>}
                 </div>
+                {!ep.upcoming && (
+                  <a className="btn btn--small" href={watchHref(item, { season, episode: ep.number })} onClick={() => mark(ep)}>Play</a>
+                )}
                 {!ep.upcoming && (
                   <button className={`btn btn--small ${isCurrent ? 'btn--on' : 'btn--ghost'}`} onClick={() => mark(ep)} aria-pressed={isCurrent}>
                     {isCurrent ? <><CheckIcon width={14} height={14} /> Up to here</> : 'I’m up to this'}

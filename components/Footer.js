@@ -20,7 +20,7 @@ export default function Footer() {
     <footer className="footer">
       <div className="footer__grid">
         <div className="footer__brand">
-          <Link href="/" aria-label="Ember home"><Logo size={34} /></Link>
+          <Link href="/" aria-label="Ember home"><Logo size={34} byline="made by anurag" /></Link>
           <p>Find your next movie, series or anime, see where it’s streaming, and keep track of what you’re watching.</p>
           <div className="socials">
             <a href="#" aria-label="Instagram"><InstagramIcon /></a>

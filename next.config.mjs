@@ -6,6 +6,7 @@ const nextConfig = {
     // Not applied to /watch/*: the player may redirect across its own domains.
     const frames = [
       "'self'",
+      'https://embed.vidrift.net',
       'https://vidly.pro',
       'https://www.vidy.st',
       'https://www.youtube-nocookie.com',
